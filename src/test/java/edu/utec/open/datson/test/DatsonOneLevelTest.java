@@ -12,9 +12,9 @@ import edu.utec.open.datson.parser.SimpleRawDataParser;
 import junit.framework.TestCase;
 
 // https://stackoverflow.com/questions/16718163/jdbctemplate-set-nested-pojo-with-beanpropertyrowmapper
-public class DatsonTest extends TestCase {
+public class DatsonOneLevelTest extends TestCase {
 
-  public List<Map<String, Object>> getData() {
+  public List<Map<String, Object>> getOneLevelData() {
     List<Map<String, Object>> rawData = new ArrayList<Map<String, Object>>();
     rawData.add(TestDataHelper.createMockedRow("id, name, job", 100, "jack", "developer"));
     rawData.add(TestDataHelper.createMockedRow("id, name, job", 101, "senku", "scientist"));
@@ -25,7 +25,7 @@ public class DatsonTest extends TestCase {
   @Test
   public void testOneLevelDataToJson() throws Exception {
     SimpleRawDataParser dataParser = new SimpleRawDataParser();
-    Object parsed = dataParser.parseCollection(getData());
+    Object parsed = dataParser.parseCollection(getOneLevelData());
 
     ObjectMapper mapper = new ObjectMapper();
     String json = mapper.writeValueAsString(parsed);
