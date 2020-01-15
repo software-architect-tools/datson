@@ -14,35 +14,33 @@ import edu.utec.open.datson.parser.SimpleRawDataParser;
 import junit.framework.TestCase;
 
 // https://stackoverflow.com/questions/16718163/jdbctemplate-set-nested-pojo-with-beanpropertyrowmapper
-public class DatsonOneLevelTest extends TestCase {
+public class DatsonSimpleEntityTest extends TestCase {
 
-  private static final Logger logger = LogManager.getLogger(DatsonOneLevelTest.class);
-  
+  private static final Logger logger = LogManager.getLogger(DatsonSimpleEntityTest.class);
+
   public List<Map<String, Object>> getOneLevelData() {
     List<Map<String, Object>> rawData = new ArrayList<Map<String, Object>>();
     rawData.add(TestDataHelper.createMockedRow("id, name, job", 100, "jack", "developer"));
-    rawData.add(TestDataHelper.createMockedRow("id, name, job", 101, "senku", "scientist"));
-    rawData.add(TestDataHelper.createMockedRow("id, name, job", 102, "richard", "anunaki"));
+    rawData.add(TestDataHelper.createMockedRow("id, name, job", 100, "jack", "scientist"));
+    rawData.add(TestDataHelper.createMockedRow("id, name, job", 100, "jack", "anunaki"));
     return rawData;
   }
 
   @Test
-  public void testOneLevelDataToJson() throws Exception {
+  public void testSimpleEntityDataToJson() throws Exception {
     SimpleRawDataParser dataParser = new SimpleRawDataParser();
-    Object parsed = dataParser.parseCollection(getOneLevelData());
+    Object parsed = dataParser.parseEntity(getOneLevelData(), "id, name");
 
     ObjectMapper mapper = new ObjectMapper();
     String json = mapper.writeValueAsString(parsed);
-    
+
     logger.info(json);
 
     Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
 
-    assertEquals(100, ((Integer)(JsonPath.read(document, "$.[0].id"))).intValue());
-    assertEquals(101, ((Integer)(JsonPath.read(document, "$.[1].id"))).intValue());
-    assertEquals(102, ((Integer)(JsonPath.read(document, "$.[2].id"))).intValue());
+    assertEquals(100, ((Integer) (JsonPath.read(document, "$.id"))).intValue());
+    assertEquals("jack", JsonPath.read(document, "$.name"));
 
-    assertEquals("senku", JsonPath.read(document, "$.[1].name"));
   }
 
 

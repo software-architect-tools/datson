@@ -3,6 +3,8 @@ package edu.utec.open.datson.test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
@@ -13,6 +15,8 @@ import junit.framework.TestCase;
 
 // https://stackoverflow.com/questions/16718163/jdbctemplate-set-nested-pojo-with-beanpropertyrowmapper
 public class DatsonInnerLevelTest extends TestCase {
+  
+  private static final Logger logger = LogManager.getLogger(DatsonInnerLevelTest.class);
 
   public List<Map<String, Object>> getOneLevelData() {
     List<Map<String, Object>> rawData = new ArrayList<Map<String, Object>>();
@@ -37,9 +41,9 @@ public class DatsonInnerLevelTest extends TestCase {
     Object parsed = dataParser.parseCollection(getOneLevelData());
 
     ObjectMapper mapper = new ObjectMapper();
-    String json = mapper.writeValueAsString(parsed);
-
-    System.out.println(json);
+    String json = mapper.writeValueAsString(parsed);    
+    
+    logger.info(json);
 
     Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
 
@@ -58,8 +62,8 @@ public class DatsonInnerLevelTest extends TestCase {
 
     ObjectMapper mapper = new ObjectMapper();
     String json = mapper.writeValueAsString(parsed);
-
-    System.out.println(json);
+    
+    logger.info(json);
 
     Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
 
